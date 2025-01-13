@@ -15,7 +15,7 @@ check_interval = 10 # second
 [[dns_records]]
 type = "A"
 dns_record_id = "xxx"
-health_check_url = "http://0.0.0.0/abc"
+health_check_url = "http://0.0.0.0/health"
 content = "1.2.3.4"
 proxied = false
 [dns_records.fallback]
@@ -26,7 +26,7 @@ proxied = true
 [[dns_records]]
 type = "A"
 dns_record_id = "xxx"
-health_check_url = "http://0.0.0.0/abc"
+health_check_url = "http://0.0.0.0/health"
 content = "1.2.3.4"
 proxied = false
 [dns_records.fallback]
@@ -39,4 +39,17 @@ proxied = true
 运行
 ```shell
 docker run --name dns-switcher -d -v $PWD/config.toml:/app/config.toml dns-switcher:latest
+```
+
+一个简单的用以响应请求的Caddy配置
+```
+# Helath Check
+:80 {
+	handle /health {
+		respond "" 200
+	}
+	handle {
+		abort
+	}
+}
 ```
